@@ -1,5 +1,5 @@
 // 定义LED引脚（Arduino Uno板载LED为13号引脚）
-const int ledPin = 2;
+const int ledPin = 4;
 
 // 存储LED当前状态
 bool ledState = LOW;
