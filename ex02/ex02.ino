@@ -1,31 +1,32 @@
-// 定义LED引脚（Arduino Uno板载LED为13号引脚）
-const int ledPin = 4;
+const int LED_PIN = 4;
+const unsigned long BLINK_INTERVAL = 500;
 
-// 存储LED当前状态
 bool ledState = LOW;
-
-// 存储上一次LED状态翻转的时间戳
-unsigned long previousMillis = 0;
-
-// 闪烁间隔（1Hz周期=1000ms，亮灭各500ms）
-const long interval = 500;
+unsigned long lastToggleTime = 0;
+unsigned long blinkCount = 0;
 
 void setup() {
-  // 设置LED引脚为输出模式
-  pinMode(ledPin, OUTPUT);
+  pinMode(LED_PIN, OUTPUT);
+  Serial.begin(9600);
+  Serial.println("1Hz LED闪烁程序启动");
+  Serial.print("闪烁间隔：");
+  Serial.print(BLINK_INTERVAL);
+  Serial.println("ms");
 }
 
 void loop() {
-  // 获取当前系统毫秒数
-  unsigned long currentMillis = millis();
-
-  // 判断是否达到翻转间隔
-  if (currentMillis - previousMillis >= interval) {
-    // 更新上一次翻转时间
-    previousMillis = currentMillis;
-
-    // 翻转LED状态
+  unsigned long currentTime = millis();
+  
+  if (currentTime - lastToggleTime >= BLINK_INTERVAL) {
+    lastToggleTime = currentTime;
     ledState = !ledState;
-    digitalWrite(ledPin, ledState);
+    digitalWrite(LED_PIN, ledState);
+    blinkCount++;
+    
+    // 串口输出调试信息
+    Serial.print("第");
+    Serial.print(blinkCount);
+    Serial.print("次翻转，当前状态：");
+    Serial.println(ledState ? "亮" : "灭");
   }
 }
